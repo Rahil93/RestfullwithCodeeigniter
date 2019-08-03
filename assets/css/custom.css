@@ -1,0 +1,26 @@
+body{
+  margin-top: 80px;
+  background: url(../img/img.jpg);
+  position: relative;
+	opacity: 0.7;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  /* background-color: blue; */
+}
+
+.login{
+  margin-top: 180px !important;
+}
+
+.card{
+  width: 45% !important;
+}
+
+.row{
+  justify-content: center !important;
+  margin-right: auto !important;
+  margin-left: auto !important;
+
+}
