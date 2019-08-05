@@ -20,7 +20,7 @@ $config = [
                                           [
                                             'field' => 'password',
                                             'label' => 'Password',
-                                            'rules' => 'required'
+                                            'rules' => 'required|greater_than[8]'
                                           ],
                                           [
                                             'field' => 'confirm_password',

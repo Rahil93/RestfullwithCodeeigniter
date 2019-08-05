@@ -12,7 +12,7 @@
         <div class="card border border-primary">
           <h5 class="card-header bg-primary text-white border border-primary">Sign In</h5>
           <div class="card-body">
-            <?php echo form_open("loginapi/getlogindata",["method"=>"POST"]) ?>
+            <?php echo form_open("LoginApi/getLoginData",["method"=>"POST"]) ?>
               <div class="form-group">
                 <label>Email Id</label>
                 <input type="email" class="form-control" name="email_id" value ="<?php echo set_value('email_id'); ?>" placeholder="Enter email id">
@@ -24,6 +24,7 @@
                 <span class="text-danger"><?php echo form_error('password'); ?></span>
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-success">Forget Password</button>
             <?php echo form_close() ?>
           </div>
         </div>

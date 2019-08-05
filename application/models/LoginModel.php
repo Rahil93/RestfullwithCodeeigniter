@@ -10,21 +10,24 @@ class LoginModel extends CI_Model
   {
     parent::__construct();
     $this->load->database();
+    $this->ObjImpJWT = new ImplementJwt();
   }
 
-  public function getLoginData($array)
+  public function getLoginData($token)
   {
-    $array = json_decode($array,true);
-    $q = $this->db->where($array)->get('user_details');
-    // return print_r($q);
-    // if ()
-    // {
-    //   return true;
-    // }
-    // else
-    // {
-    //   return false;
-    // }
+    $token = $this->ObjImpJWT->DecodeToken($token);
+    $array = json_decode($token[0],true);
+    $q = $this->db->where($array)
+                  ->where('email_verified','true')
+                  ->get('user_details');
+    if ($q->num_rows() > 0)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
   }
 }
 

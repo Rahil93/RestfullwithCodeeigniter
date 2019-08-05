@@ -18,30 +18,47 @@ class RegisterApi extends CI_Controller
 
   public function getRegisterData()
   {
-    $this->load->library('form_validation');
     if ( $this->form_validation->run('register_form_rules') )
     {
       $data = $this->input->post();
       unset($data['confirm_password']);
       $data['password'] = md5($data['password']);
+      $data['email_verified'] = 'false';
       $data = json_encode($data);
-      echo '<pre>';
-      print_r($data);
       $token = $this->ObjImpJWT->GenerateToken($data);
-      echo '<pre>';
-      print_r(json_encode($token));
-      $deToken = $this->ObjImpJWT->DecodeToken($token);
-      echo "<pre>";
-      print_r($deToken);
+      $this->postRegisterData($token);
+    }
+    else
+    {
+      $this->index();
+    }
+  }
 
-      $subject = "Please verify email for login";
-                $message = "Hi ".$this->input->post('user_name')." This is email verification mail from Codeigniter Login Register system.";
+  public function postRegisterData($token)
+  {
+      $this->load->model('RegisterModel','regmodel');
+      $this->regmodel->postRegisterData($token);
+      $this->getVerificationKey();
+  }
+
+  public function getVerificationKey()
+  {
+    $this->load->model('RegisterModel','regmodel');
+    $key = $this->regmodel->getUserId($this->input->post('firstname'),$this->input->post('lastname')); 
+    $verification_token = $this->ObjImpJWT->GenerateToken( (int) $key);
+    $this->sendEmailVerificaton($verification_token);
+  }
+
+  public function sendEmailVerificaton($verification_token)
+  {
+    $subject = "Please verify email for login";
+                $message = "Hi ".$this->input->post('firstname')." ".$this->input->post('lastname').", \nThis is email verification mail from Codeigniter Login Register system.\nFor complete registration process and login into system you have to verify you email by click this link.\n".base_url()."RegisterApi/verifyEmail/".$verification_token."\nOnce you click this link your email will be verified and you can login into system.\nThanks.";
                 $config['protocol']     = 'smtp';
                 $config['smtp_host']    = 'ssl://smtp.gmail.com';
                 $config['smtp_port']    = '465';
                 $config['smtp_timeout'] = '7';
-                $config['smtp_user']    = '******@gmail.com';
-                $config['smtp_pass']    = '*********';
+                $config['smtp_user']    = 'rahilstar11@gmail.com';
+                $config['smtp_pass']    = '8454895228';
                 $config['charset']      = 'utf-8';
                 $config['newline']      = "\r\n";
                 $config['mailtype']     = 'text'; 
@@ -49,18 +66,32 @@ class RegisterApi extends CI_Controller
 
                 $this->email->initialize($config);
                
-                $this->email->from('*******@gmail.com');
+                $this->email->from('rahilstar11@gmail.com');
                 $this->email->to($this->input->post('email_id'));
                 $this->email->subject($subject);
                 $this->email->message($message);
-                $this->email->send();
-      // $this->load->model('RegisterModel','regmodel');
-      // $this->regmodel->postRegisterData($data);
-      // echo "Successfull Register";
-    }
-    else
+                if ($this->email->send()) 
+                {
+                  echo "Please check email for verification";
+                }
+                else 
+                {
+                  echo "Error While Sending Mail";
+                }
+  }
+
+  public function verifyEmail()
+  {
+    $token = $this->uri->segment(3);
+    $this->load->model('RegisterModel','regmodel');
+    if ($this->regmodel->verifyEmail($token)) 
     {
-      $this->index();
+      echo "Verification of email has done Successfully";
+      header("Refresh: 5; url=".base_url()."/LoginApi");
+    }
+    else 
+    {
+      echo "Not Valid User";
     }
   }
 }
