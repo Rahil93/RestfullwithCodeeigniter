@@ -24,7 +24,7 @@
                 <span class="text-danger"><?php echo form_error('password'); ?></span>
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="submit" class="btn btn-success">Forget Password</button>
+              <button type="submit" formaction="ForgetPasswordApi" class="btn btn-success">Forget Password</button>
             <?php echo form_close() ?>
           </div>
         </div>

@@ -39,7 +39,26 @@ $config = [
                                             'label' => 'Password',
                                             'rules' => 'required'
                                           ]
-                                       ]
+                                        ],
+                  'frgtpassword_form_rules' => [
+                                                  [
+                                                    'field' => 'password',
+                                                    'label' => 'New Password',
+                                                    'rules' => 'required'
+                                                  ],
+                                                  [
+                                                    'field' => 'confirm_password',
+                                                    'label' => 'Confirm Password',
+                                                    'rules' => 'required|matches[password]'
+                                                  ]
+                                                ],
+                    'emailverify_form_rules' => [
+                                                  [
+                                                    'field' => 'email_id',
+                                                    'label' => 'Email Address',
+                                                    'rules' => 'required|valid_email'
+                                                  ]
+                                                ]
           ];
 
  ?>

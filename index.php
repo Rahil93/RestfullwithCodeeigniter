@@ -305,6 +305,11 @@ switch (ENVIRONMENT)
 
 	define('VIEWPATH', $view_folder.DIRECTORY_SEPARATOR);
 
+// include library predis
+require_once APPPATH.'libraries/lib_redis/autoload.php';
+
+Predis\Autoloader::register();
+
 /*
  * --------------------------------------------------------------------
  * LOAD THE BOOTSTRAP FILE
