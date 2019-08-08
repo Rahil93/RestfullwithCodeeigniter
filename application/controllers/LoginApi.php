@@ -1,8 +1,5 @@
 <?php
 
-/**
- *
- */
 class LoginApi extends CI_Controller
 {
 
@@ -25,7 +22,6 @@ class LoginApi extends CI_Controller
         $data = $this->input->post();
         $data['password'] = md5($data['password']);
         $data = json_encode($data);
-        // $token = $this->ObjImpJWT->GenerateToken($data);
         $this->load->model('LoginModel','logmodel');
         if ($this->logmodel->getLoginData($data))
         {

@@ -12,7 +12,6 @@ class LoginModel extends CI_Model
 
   public function getLoginData($data)
   {
-    // $token = $this->ObjImpJWT->DecodeToken($token);
     $array = json_decode($data,true);
     $q = $this->db->where($array)
                   ->where('email_verified','true')

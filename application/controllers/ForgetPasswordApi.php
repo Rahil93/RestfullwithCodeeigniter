@@ -54,73 +54,50 @@ class ForgetPasswordApi extends CI_Controller
         }
     }
 
-    // public function sendEmailVerificaton($verification_token)
-    // {
-    //     $subject = "Please verify email to reset your password";
-    //     $message = "Hi , \nThis is email verification mail from Codeigniter Login Register system.\nFor complete forget password process and login into system you have to verify you email by click this link.\n".base_url()."ForgetPasswordApi/getEmailToken/".$verification_token."\nOnce you click this link your email will be verified and you can reset your password into system.\nThanks.";
-                  
-    //     $rabbitmq = new RBMQMail();
-    //     $rabbitmq->sendRabQueue();
-    //               $this->email->initialize($config);
-                
-    //               $this->email->from('rahilstar11@gmail.com');
-    //               $this->email->to($this->input->post('email_id'));
-    //               $this->email->subject($subject);
-    //               $this->email->message($message);
-    //               if ($this->email->send()) 
-    //               {
-    //                 echo "Please check email for verification";
-    //               }
-    //               else 
-    //               {
-    //                 echo "Error While Sending Mail";
-    //               }
-    // }
+    public function displayResetPassword()
+    {
+        $this->load->view('ForgetPasswordForm');
+        
+    }
 
-  public function displayResetPassword()
-  {
-      $this->load->view('ForgetPasswordForm');
-      
-  }
+    public function getEmailToken()
+    {
+        $emailToken = $this->uri->segment(3);
+        $this->load->library('redis');
+        $redis = $this->redis->config();
 
-  public function getEmailToken()
-  {
-    $emailToken = $this->uri->segment(3);
-    $this->load->library('redis');
-    $redis = $this->redis->config();
+        $redis->set('eToken', $emailToken);
 
-    $redis->set('eToken', $emailToken);
+        redirect("ForgetPasswordApi/resetPassword");
+    }
 
-    redirect("ForgetPasswordApi/resetPassword");
-  }
+    public function resetPassword()
+    {
+        $this->load->library('redis');
+        $redis = $this->redis->config();
 
-  public function resetPassword()
-  {
-      $this->load->library('redis');
-      $redis = $this->redis->config();
-
-      $eToken = $redis->get('eToken');
-      
-      if ($this->form_validation->run('frgtpassword_form_rules')) 
-      {      
-          $data = md5($this->input->post('password'));
-          $data = json_encode($data);
-          $this->load->model('ForgetPasswordModel','frgtmodel');
-          if ($this->frgtmodel->resetPassword($data,$eToken)) 
-          {
-             echo "Password has been Reset";
-             header("Refresh: 3; url=".base_url()."/LoginApi");
-          }
-          else 
-          {
-              echo "Reset Your Password Again";
-          }  
-      } 
-      else 
-      {
-          $this->displayResetPassword();
-      }
-  }
+        $eToken = $redis->get('eToken');
+        
+        if ($this->form_validation->run('frgtpassword_form_rules')) 
+        {      
+            $data = md5($this->input->post('password'));
+            $data = json_encode($data);
+            $this->load->model('ForgetPasswordModel','frgtmodel');
+            if ($this->frgtmodel->resetPassword($data,$eToken)) 
+            {
+                echo "Password has been Reset";
+                header("Refresh: 3; url=".base_url()."/LoginApi");
+            }
+            else 
+            {
+                echo "Reset Your Password Again";
+            }  
+        } 
+        else 
+        {
+            $this->displayResetPassword();
+        }
+    }
 
 }
 
