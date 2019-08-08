@@ -12,7 +12,8 @@ class ForgetPasswordModel extends CI_Model
     public function verifyEmail($email)
     {
         $query = $this->db->where($email)
-                          ->get('user_details');
+                          ->get('user_details'); 
+
         if ($query->num_rows() > 0) 
         {
             return true;
@@ -23,10 +24,9 @@ class ForgetPasswordModel extends CI_Model
         }
     }
 
-    public function resetPassword($token,$emailToken)
+    public function resetPassword($data,$emailToken)
     {
-        $password = $this->ObjImpJWT->DecodeToken($token);
-        $password = json_decode($password[0],true);
+        $password = json_decode($data,true);
 
         $email = $this->ObjImpJWT->DecodeToken($emailToken);
         $email = json_decode($email[0],true);
@@ -46,7 +46,6 @@ class ForgetPasswordModel extends CI_Model
             return false;
         }
     }
-
 }
 
 ?>

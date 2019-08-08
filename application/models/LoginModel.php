@@ -1,8 +1,5 @@
 <?php
 
-/**
- *
- */
 class LoginModel extends CI_Model
 {
 
@@ -13,10 +10,10 @@ class LoginModel extends CI_Model
     $this->ObjImpJWT = new ImplementJwt();
   }
 
-  public function getLoginData($token)
+  public function getLoginData($data)
   {
-    $token = $this->ObjImpJWT->DecodeToken($token);
-    $array = json_decode($token[0],true);
+    // $token = $this->ObjImpJWT->DecodeToken($token);
+    $array = json_decode($data,true);
     $q = $this->db->where($array)
                   ->where('email_verified','true')
                   ->get('user_details');
@@ -30,6 +27,5 @@ class LoginModel extends CI_Model
     }
   }
 }
-
 
 ?>

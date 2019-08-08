@@ -25,9 +25,9 @@ class LoginApi extends CI_Controller
         $data = $this->input->post();
         $data['password'] = md5($data['password']);
         $data = json_encode($data);
-        $token = $this->ObjImpJWT->GenerateToken($data);
+        // $token = $this->ObjImpJWT->GenerateToken($data);
         $this->load->model('LoginModel','logmodel');
-        if ($this->logmodel->getLoginData($token))
+        if ($this->logmodel->getLoginData($data))
         {
           echo "Successfully Login";
         }
@@ -38,10 +38,8 @@ class LoginApi extends CI_Controller
       else
       {
         $this->index();
-        echo "Not Validate";
       }
   }
 }
-
 
 ?>
