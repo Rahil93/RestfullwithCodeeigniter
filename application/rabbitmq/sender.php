@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/vendor/autoload.php';
 require_once APPPATH."/rabbitmq/receiver.php";
 
@@ -29,12 +30,7 @@ class RBMQMail
     {
         $objrec = new RMail();
         $objrec->sendMail();
-    }
-
-    
+    }    
 }
-
- 
-
  
 ?>

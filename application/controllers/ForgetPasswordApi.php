@@ -10,7 +10,6 @@ class ForgetPasswordApi extends CI_Controller
         $this->load->library('form_validation');
         $this->load->library('email');
         $this->ObjImpJWT = new ImplementJwt();
-        $this->load->driver('cache');
     }
 
     public function index()
